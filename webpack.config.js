@@ -41,7 +41,6 @@ module.exports = {
     compress:           true,
     historyApiFallback: true,
     open:               true,
-    overlay:            true,
     port:               4201
   },
   resolve:      {

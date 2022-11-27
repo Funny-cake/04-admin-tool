@@ -1,0 +1,43 @@
+{
+  "name": "04-admin-tool",
+  "version": "1.0.0",
+  "description": "tools for admin",
+  "main": "app.jsx",
+  "scripts": {
+    "start": "webpack --mode development --watch",
+    "serve": "webpack serve --open",
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Funny-cake/04-admin-tool.git"
+  },
+  "author": "daria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Funny-cake/04-admin-tool/issues"
+  },
+  "homepage": "https://github.com/Funny-cake/04-admin-tool#readme",
+  "dependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "babel-loader": "^9.1.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "cli": "^1.0.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.2",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.0",
+    "postcss-loader": "^7.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass-loader": "^13.2.0",
+    "webpack": "^5.75.0"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
+  }
+}
