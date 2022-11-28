@@ -1,5 +1,5 @@
 import Express from "express";
-import { create, findAll, findOne, /* update, delete, deleteAll */ } from "../controllers/user.controller.js";
+import { create, findAll, findOne, update /*, delete, deleteAll */ } from "../controllers/user.controller.js";
 
 const userRoutes = (app) => {
 	var router = Express.Router();
@@ -10,7 +10,7 @@ const userRoutes = (app) => {
 
 	router.get("/:id", findOne);
 
-	// router.put("/:id", update);
+	 router.put("/:id", update);
 
 	// router.delete("/:id", delete);
 

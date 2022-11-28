@@ -1,81 +1,127 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styles from './users-page.component.scss';
 import { connect } from "react-redux";
 import { retrieveUsers, updateUser, deleteAllUsers } from "../../actions/users";
 
-class UsersPage extends Component {
-	constructor(props) {
-		super(props);
-		this.refreshData = this.refreshData.bind(this);
+function UsersPage(props) {
+	const { users } = props;
 
-		//this.removeAllUsers = this.removeAllUsers.bind(this);
+	const [checked, setChecked] = useState([]);
 
-		this.state = {
-			selectedIds: []
-		};
+	useEffect(() => {
+		props.retrieveUsers();
+	}, []);
+
+	const refreshData = () => {
+		setChecked([]);
 	}
 
-	componentDidMount() {
-		this.props.retrieveUsers();
-	}
-
-	refreshData() {
-		this.setState({
-			selectedIds: []
-		});
-	}
-
-	removeAllUsers() {
-		this.props
+	const removeAllUsers = () => {
+		props
 			.deleteAllUsers()
 			.then((response) => {
-				console.log(response);
-				this.refreshData();
+				refreshData();
 			})
 			.catch((e) => {
-				console.log(e);
+				console.error(e);
 			});
 	}
 
-	render() {
-		const { selectedIds } = this.state;
-		const { users } = this.props;
-		const getStatus = (user) => {
-			const blocked = !!user.blockedAt;
-			const deleted = !!user.deletedAt;
+	const blockUser = () => {
+		const promises = checked.map((id) => props.updateUser(id, { blockedAt: new Date() }));
 
-			switch(true) {
-				case !blocked && !deleted: 
-					return "ACTIVE";
-				case blocked && !deleted:
-					return "BLOCKED";
-				case !blocked && deleted:
-				case blocked && deleted:
-					return "DELETED";
-			}
+		Promise
+			.all(promises)
+			.then((response) => {
+				props.retrieveUsers();
+				refreshData();
+			})
+			.catch((e) => {
+				console.error(e);
+			});
+	};
+
+	const unblockUser = () => {
+		const promises = checked.map((id) => props.updateUser(id, { blockedAt: null }));
+
+		Promise
+			.all(promises)
+			.then((response) => {
+				props.retrieveUsers();
+				refreshData();
+			})
+			.catch((e) => {
+				console.error(e);
+			});
+	};
+
+	const deleteUser = () => {
+		const promises = checked.map((id) => props.updateUser(id, { deletedAt: new Date() }));
+
+		Promise
+			.all(promises)
+			.then((response) => {
+				props.retrieveUsers();
+				refreshData();
+			})
+			.catch((e) => {
+				console.error(e);
+			});
+	};
+
+	const checkUser = (event) => {
+		var updatedList = [...checked];
+		var value = parseInt(event.target.value);
+
+		if (event.target.checked) {
+			updatedList = [...checked, value];
+		} else {
+			updatedList.splice(checked.indexOf(value), 1);
 		}
+		setChecked(updatedList);
+	};
 
-		return (
-			<div className={styles.usersPage} >
-				<div>Users List</div>
-				<div className={styles.container}>
-					<table class="table">
-						<thead class="thead-light">
-							<tr>
-								<th scope="col"><button type="button" class="toggle_checked" id='all_select'>select all</button></th>
-								<th scope="col">id</th>
-								<th scope="col">name</th>
-								<th scope="col">mail</th>
-								<th scope="col">date</th>
-								<th scope="col">last login</th>
-								<th scope="col">status</th>
-							</tr>
-						</thead>
-						<tbody>
+	const getStatus = (user) => {
+		const blocked = !!user.blockedAt;
+		const deleted = !!user.deletedAt;
+
+		switch (true) {
+			case !blocked && !deleted:
+				return "ACTIVE";
+			case blocked && !deleted:
+				return "BLOCKED";
+			case !blocked && deleted:
+			case blocked && deleted:
+				return "DELETED";
+		}
+	}
+
+	return (
+		<div className={styles.usersPage} >
+			<div>Users List</div>
+			<div className={styles.container}>
+				<div className={styles.toolbar}>
+					<button name="block" onClick={blockUser}>block</button>
+					<button name="unblock" onClick={unblockUser}>unblock</button>
+					<button name="delete" onClick={deleteUser}>delete</button>
+				</div>
+				<table class="table">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col"><input type="checkbox" /></th>
+							<th scope="col">id</th>
+							<th scope="col">name</th>
+							<th scope="col">mail</th>
+							<th scope="col">date</th>
+							<th scope="col">last login</th>
+							<th scope="col">status</th>
+						</tr>
+					</thead>
+					<tbody>
 						{users &&
 							users.map((user, index) => (
 								<tr key={index}>
-									<th><input type="checkbox" /></th>
+									<th><input type="checkbox" value={user.id} checked={checked.indexOf(user.id) != -1} onChange={checkUser} /></th>
 									<th scope="row">{user.id}</th>
 									<td>{user.name}</td>
 									<td>{user.email}</td>
@@ -84,18 +130,17 @@ class UsersPage extends Component {
 									<td>{getStatus(user)}</td>
 								</tr>
 							))}
-						</tbody>
-					</table>
-				</div>
-			</div >
-		);
-	}
+					</tbody>
+				</table>
+			</div>
+		</div >
+	);
 }
 
 const mapStateToProps = (state) => {
 	return {
-	  users: state.users,
+		users: state.users,
 	};
-  };
-  
-  export default connect(mapStateToProps, { retrieveUsers, updateUser, deleteAllUsers })(UsersPage);
+};
+
+export default connect(mapStateToProps, { retrieveUsers, updateUser, deleteAllUsers })(UsersPage);

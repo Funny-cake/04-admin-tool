@@ -60,9 +60,29 @@ export function findOne(req, res) {
 		});
 };
 
-// export function update (req, res) {
+export function update(req, res) {
+	const id = req.params.id;
 
-// };
+	db.users.update(req.body, {
+		where: { id: id }
+	})
+		.then(num => {
+			if (num == 1) {
+				res.send({
+					message: "User was updated successfully."
+				});
+			} else {
+				res.send({
+					message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+				});
+			}
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: "Error updating User with id=" + id
+			});
+		});
+};
 
 // export function delete (req, res) {
 
