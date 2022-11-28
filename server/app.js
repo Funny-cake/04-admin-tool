@@ -1,10 +1,11 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import db from "./app/models/db.js";
+import userRoutes from "./app/routes/user.routes.js";
 
 const app = express();
 // app.use(...);
 
-const db = require("./app/models");
 db.sequelize.sync();
 
 var corsOptions = {
@@ -21,9 +22,10 @@ app.get("/", (req, res) => {
 	res.json({ message: "Welcome to daria`s application" });
 });
 
-require("./app/routes/user.routes")(app);
-
 const PORT = process.env.PORT || 8080;
+
+userRoutes(app);
+
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}.`);
 });

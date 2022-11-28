@@ -1,8 +1,6 @@
-const db = require("../models");
-const User = db.users;
-const Op = db.Sequelize.Op;
+import db from "../models/db.js";
 
-exports.create = (req, res) => {
+export function create(req, res) {
 	if (!req.body.name || !req.body.email) {
 		res.status(400).send({
 			message: "Content can not be empty!"
@@ -16,7 +14,7 @@ exports.create = (req, res) => {
 		registered_date: new Date()
 	};
 
-	User.create(user)
+	db.users.create(user)
 		.then((data) => {
 			res.send(data);
 		})
@@ -28,8 +26,8 @@ exports.create = (req, res) => {
 		});
 };
 
-exports.findAll = (req, res) => {
-	User.findAll()
+export function findAll(req, res) {
+	db.users.findAll()
 		.then(data => {
 			res.send(data);
 		})
@@ -41,22 +39,35 @@ exports.findAll = (req, res) => {
 		});
 };
 
-exports.findOne = (req, res) => {
 
+export function findOne(req, res) {
+	const id = req.params.id;
+
+	db.users.findByPk(id)
+		.then(data => {
+			if (data) {
+				res.send(data);
+			} else {
+				res.status(404).send({
+					message: `Cannot find User with id=${id}.`
+				});
+			}
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: "Error retrieving User with id=" + id
+			});
+		});
 };
 
-exports.update = (req, res) => {
+// export function update (req, res) {
 
-};
+// };
 
-exports.delete = (req, res) => {
+// export function delete (req, res) {
 
-};
+// };
 
-exports.deleteAll = (req, res) => {
+// export function deleteAll (req, res) {
 
-};
-
-exports.findAllPublished = (req, res) => {
-
-};
+// };

@@ -1,21 +1,22 @@
-module.exports = app => {
-	const users = require("../controllers/user.controller.js");
+import Express from "express";
+import { create, findAll, findOne, /* update, delete, deleteAll */ } from "../controllers/user.controller.js";
 
-	var router = require("express").Router();
+const userRoutes = (app) => {
+	var router = Express.Router();
 
-	router.post("/", users.create);
+	router.post("/", create);
 
-	router.get("/", users.findAll);
+	router.get("/", findAll);
 
-	router.get("/published", users.findAllPublished);
+	router.get("/:id", findOne);
 
-	router.get("/:id", users.findOne);
+	// router.put("/:id", update);
 
-	router.put("/:id", users.update);
+	// router.delete("/:id", delete);
 
-	router.delete("/:id", users.delete);
-
-	router.delete("/", users.deleteAll);
+	// router.delete("/", deleteAll);
 
 	app.use('/api/users', router);
 };
+
+export default userRoutes;
