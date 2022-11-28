@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './RegistrationPage.scss';
+import styles from './registration-page.component.scss';
 
 export default function RegistrationPage() {
 	return (

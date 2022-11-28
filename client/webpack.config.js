@@ -41,7 +41,7 @@ module.exports = {
     compress:           true,
     historyApiFallback: true,
     open:               true,
-    port:               4201
+    port:               8081
   },
   resolve:      {
     extensions: ['.js', '.jsx', '.scss', '.woff', '.woff2', '.ttf', '.eot','.mp4','.mov'],

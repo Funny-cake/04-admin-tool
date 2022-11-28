@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './LoginPage.scss';
+import styles from './login-page.component.scss';
 
 export default function LoginPage() {
 	return (
