@@ -1,20 +1,21 @@
 import Express from "express";
 import { create, findAll, findOne, update, deleteUser, deleteAllUsers } from "../controllers/user.controller.js";
+import verifyToken from "../middleware/auth-jwt.js";
 
 const userRoutes = (app) => {
 	var router = Express.Router();
 
 	router.post("/", create);
 
-	router.get("/", findAll);
+	router.get("/", [verifyToken], findAll);
 
-	router.get("/:id", findOne);
+	router.get("/:id", [verifyToken], findOne);
 
-	router.put("/:id", update);
+	router.put("/:id", [verifyToken], update);
 
-	router.delete("/:id", deleteUser);
+	router.delete("/:id", [verifyToken], deleteUser);
 
-	router.delete("/", deleteAllUsers);
+	router.delete("/", [verifyToken], deleteAllUsers);
 
 	app.use('/api/users', router);
 };

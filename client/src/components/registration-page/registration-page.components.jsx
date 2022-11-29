@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import styles from './registration-page.component.scss';
 import { connect } from "react-redux";
 import { createUser } from "../../actions/users";
+import { useHistory } from "react-router-dom";
 
 function RegistrationPage(props) {
 	const [ name, setName ] = useState("");
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
+	const history = useHistory();
 
 	function onSubmit(e) {
 		e.preventDefault();
@@ -15,7 +17,7 @@ function RegistrationPage(props) {
 			props
 				.createUser(name, email, password)
 				.then((data) => {
-					console.log(data);
+					history.push("/login");
 				});
 		} else {
 			console.error("Please provide full data.")

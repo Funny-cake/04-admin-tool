@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import db from "./app/models/db.js";
 import userRoutes from "./app/routes/user.routes.js";
+import authRoutes from "./app/routes/auth.routes.js";
 
 const app = express();
-// app.use(...);
 
 db.sequelize.sync();
 
@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 8080;
 
 userRoutes(app);
+authRoutes(app);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}.`);
