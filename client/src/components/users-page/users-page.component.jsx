@@ -112,7 +112,7 @@ function UsersPage(props) {
 							<th scope="col">id</th>
 							<th scope="col">name</th>
 							<th scope="col">mail</th>
-							<th scope="col">date</th>
+							<th scope="col">registered</th>
 							<th scope="col">last login</th>
 							<th scope="col">status</th>
 						</tr>

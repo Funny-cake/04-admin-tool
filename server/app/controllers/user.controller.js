@@ -1,22 +1,32 @@
 import db from "../models/db.js";
+import { getHash, getSlatedHash } from "../helpers/hash.helper.js";
+import { mapUser } from "../helpers/user.helper.js"; 
 
 export function create(req, res) {
-	if (!req.body.name || !req.body.email) {
+	if (!req.body.name || !req.body.email || !req.body.password) {
 		res.status(400).send({
 			message: "Content can not be empty!"
 		});
 		return;
 	}
 
+	const date = new Date();
+	const salt = getHash(date.getTime().toString());
+	const password = req.body.password;
+	const hash = getSlatedHash(password, salt);
+
 	const user = {
 		name: req.body.name,
 		email: req.body.email,
-		registered_date: new Date()
+		registeredAt: date,
+		salt: salt,
+		hash: hash,
+		updatedAt: date
 	};
 
 	db.users.create(user)
 		.then((data) => {
-			res.send(data);
+			res.send(mapUser(data));
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -29,7 +39,7 @@ export function create(req, res) {
 export function findAll(req, res) {
 	db.users.findAll()
 		.then(data => {
-			res.send(data);
+			res.send(data.map(mapUser));
 		})
 		.catch(err => {
 			res.status(500).send({
@@ -46,7 +56,7 @@ export function findOne(req, res) {
 	db.users.findByPk(id)
 		.then(data => {
 			if (data) {
-				res.send(data);
+				res.send(mapUser(data));
 			} else {
 				res.status(404).send({
 					message: `Cannot find User with id=${id}.`
@@ -84,10 +94,10 @@ export function update(req, res) {
 		});
 };
 
-// export function delete (req, res) {
+export function deleteUser (req, res) {
 
-// };
+};
 
-// export function deleteAll (req, res) {
+export function deleteAllUsers (req, res) {
 
-// };
+};

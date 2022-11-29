@@ -1,10 +1,16 @@
 import React from 'react';
 import styles from './login-page.component.scss';
 
+
+
 export default function LoginPage() {
+	const [ name, setName ] = useState("");
+	const [ email, setEmail ] = useState("");
+	const [ password, setPassword ] = useState("");
+
 	return (
 		<div className={styles.loginPage}>
-			<div>LoginPage</div>
+			<div>Login Page</div>
 			<div className={styles.container}>
 				<form>
 					<div class="mb-3">

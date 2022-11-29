@@ -11,6 +11,12 @@ const setupUser = (sequelize, Sequelize) => {
 		email: {
 			type: Sequelize.STRING(255)
 		},
+		hash: {
+			type: Sequelize.STRING(64)
+		},
+		salt: {
+			type: Sequelize.STRING(64)
+		},
 		lastLoginAt: {
 			type: Sequelize.DATE
 		},
