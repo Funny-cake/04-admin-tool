@@ -12,7 +12,7 @@ import store from './store';
 ReactDOM.render(
 	<Provider store={store}>
 		<div>
-			<BrowserRouter basename="https://funny-cake.github.io/04-admin-tool">
+			<BrowserRouter basename="/04-admin-tool">
 				<Switch>
 					<Route exact path="/">
 						<UsersPage />
