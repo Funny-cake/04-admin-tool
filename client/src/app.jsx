@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { NavLink, BrowserRouter, Switch, Route } from "react-router-dom";
 
 import UsersPage from './components/users-page/users-page.component';
 import LoginPage from './components/login-page/login-page.component';
@@ -13,6 +13,32 @@ ReactDOM.render(
 	<Provider store={store}>
 		<div>
 			<BrowserRouter basename="/04-admin-tool">
+				<nav>
+					<ul>
+						<li style={{display: "inline"}}>
+							<NavLink
+								to="/"
+							>
+								[Users]
+							</NavLink>
+						</li>
+						<li style={{display: "inline"}}>
+							<NavLink
+								to="/login"
+							>
+								[Login]
+							</NavLink>
+						</li>
+						<li style={{display: "inline"}}>
+							<NavLink
+								to="/registration"
+							>
+								[Registration]
+							</NavLink>
+						</li>
+					</ul>
+				</nav>
+
 				<Switch>
 					<Route exact path="/">
 						<UsersPage />
