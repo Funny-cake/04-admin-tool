@@ -2,6 +2,7 @@ import {
 	CREATE_USER,
 	RETRIEVE_USERS,
 	UPDATE_USER,
+	UPDATE_ALL_USERS,
 	DELETE_USER,
 	DELETE_ALL_USERS
 } from "./types";
@@ -52,6 +53,68 @@ export const updateUser = (id, data) => async (dispatch) => {
 	}
 };
 
+export const blockUser = (id) => async (dispatch) => {
+	try {
+		const res = await UserDataService.blockUser(id);
+
+		console.log(res);
+
+		dispatch({
+			type: UPDATE_USER,
+			payload: res.data,
+		});
+
+		return Promise.resolve(res.data);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
+export const blockAllUsers = () => async (dispatch) => {
+	try {
+		const res = await UserDataService.blockAllUsers();
+
+		dispatch({
+			type: UPDATE_ALL_USERS,
+			payload: res.data,
+		});
+
+		return Promise.resolve(res.data);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
+export const unblockUser = (id) => async (dispatch) => {
+	try {
+		const res = await UserDataService.unblockUser(id);
+
+		dispatch({
+			type: UPDATE_USER,
+			payload: res.data,
+		});
+
+		return Promise.resolve(res.data);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
+export const unblockAllUsers = () => async (dispatch) => {
+	try {
+		const res = await UserDataService.unblockAllUsers();
+
+		dispatch({
+			type: UPDATE_ALL_USERS ,
+			payload: res.data,
+		});
+
+		return Promise.resolve(res.data);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
 export const deleteUser = (id) => async (dispatch) => {
 	try {
 		await UserDataService.delete(id);
@@ -71,7 +134,7 @@ export const deleteAllUsers = () => async (dispatch) => {
 
 		dispatch({
 			type: DELETE_ALL_USERS,
-			payload: res.data,
+			payload: [],
 		});
 
 		return Promise.resolve(res.data);

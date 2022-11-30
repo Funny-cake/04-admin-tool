@@ -25,7 +25,23 @@ class UserDataService {
 	}
 
 	deleteAll() {
-		return http.delete(baseURL);
+		return http.delete(baseURL, { headers: authHeader() });
+	}
+
+	blockUser(id) {
+		return http.post(`${baseURL}/${id}/block`, { headers: authHeader() });
+	}
+
+	unblockUser(id) {
+		return http.post(`${baseURL}/${id}/unblock`, { headers: authHeader() });
+	}
+
+	blockAllUsers() {
+		return http.post(`${baseURL}/block-all`, { headers: authHeader() });
+	}
+
+	unblockAllUsers() {
+		return http.post(`${baseURL}/unblock-all`, { headers: authHeader() });
 	}
 }
 

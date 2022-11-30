@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styles from './users-page.component.scss';
 import { connect } from "react-redux";
-import { retrieveUsers, updateUser, deleteAllUsers } from "../../actions/users";
+import { retrieveUsers, updateUser, deleteAllUsers, blockUser, blockAllUsers, deleteUser, unblockUser, unblockAllUsers  } from "../../actions/users";
+import AuthService from "../../services/auth.service";
+import { useHistory } from "react-router-dom";
 
 function UsersPage(props) {
 	const { users } = props;
 
 	const [checked, setChecked] = useState([]);
+	const [checkedAll, setCheckedAll] = useState(false);
+	const history = useHistory();
 
 	useEffect(() => {
 		props.retrieveUsers();
@@ -14,65 +18,97 @@ function UsersPage(props) {
 
 	const refreshData = () => {
 		setChecked([]);
+		setCheckedAll(false);
 	}
 
-	const removeAllUsers = () => {
-		props
-			.deleteAllUsers()
-			.then((response) => {
-				refreshData();
-			})
-			.catch((e) => {
-				console.error(e);
-			});
-	}
-
-	const blockUser = () => {
-		const promises = checked.map((id) => props.updateUser(id, { blockedAt: new Date() }));
-
-		Promise
-			.all(promises)
-			.then((response) => {
-				props.retrieveUsers();
-				refreshData();
-			})
-			.catch((e) => {
-				console.error(e);
-			});
+	const onBlockClick = async () => {
+		if (checkedAll) {
+			await props.blockAllUsers()
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		} else {
+			const promises = checked.map((id) => props.blockUser(id));
+			Promise
+				.all(promises)
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		}
+		
+		const currentUser = AuthService.currentUser();
+		if(checkedAll || (currentUser && checked.indexOf(currentUser.id) != -1)) {
+			AuthService.logout();
+			history.push("/login");
+		}
 	};
 
-	const unblockUser = () => {
-		const promises = checked.map((id) => props.updateUser(id, { blockedAt: null }));
+	const onUnblockClick = async () => {
+		if (checkedAll) {
+			await props.unblockAllUsers()
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		} else {
+			const promises = checked.map((id) => props.unblockUser(id));
 
-		Promise
-			.all(promises)
-			.then((response) => {
-				props.retrieveUsers();
-				refreshData();
-			})
-			.catch((e) => {
-				console.error(e);
-			});
+			Promise
+				.all(promises)
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		}
 	};
 
-	const deleteUser = () => {
-		const promises = checked.map((id) => props.updateUser(id, { deletedAt: new Date() }));
+	const onDeleteClick = () => {
+		if (checkedAll) {
+			props.deleteAllUsers()
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		} else {
+			const promises = checked.map((id) => props.deleteUser(id));
+			Promise
+				.all(promises)
+				.then((response) => {
+					props.retrieveUsers();
+					refreshData();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		}
 
-		Promise
-			.all(promises)
-			.then((response) => {
-				props.retrieveUsers();
-				refreshData();
-			})
-			.catch((e) => {
-				console.error(e);
-			});
+		const currentUser = AuthService.currentUser();
+		if(checkedAll || (currentUser && checked.indexOf(currentUser.id) != -1)) {
+			AuthService.logout();
+			history.push("/login");
+		}
 	};
 
 	const checkUser = (event) => {
 		var updatedList = [...checked];
 		var value = parseInt(event.target.value);
-
 		if (event.target.checked) {
 			updatedList = [...checked, value];
 		} else {
@@ -80,6 +116,14 @@ function UsersPage(props) {
 		}
 		setChecked(updatedList);
 	};
+
+	const checkAll = (event) => {
+		if (event.target.checked) {
+			setCheckedAll(true);
+		} else {
+			setCheckedAll(false);
+		}
+	}
 
 	const getStatus = (user) => {
 		const blocked = !!user.blockedAt;
@@ -101,14 +145,19 @@ function UsersPage(props) {
 			<div>Users List</div>
 			<div className={styles.container}>
 				<div className={styles.toolbar}>
-					<button name="block" onClick={blockUser}>block</button>
-					<button name="unblock" onClick={unblockUser}>unblock</button>
-					<button name="delete" onClick={deleteUser}>delete</button>
+					<button name="block" onClick={onBlockClick}>block</button>
+					<button name="unblock" onClick={onUnblockClick}>unblock</button>
+					<button name="delete" onClick={onDeleteClick}>delete</button>
 				</div>
 				<table class="table">
 					<thead class="thead-light">
 						<tr>
-							<th scope="col"><input type="checkbox" /></th>
+							<th scope="col">
+								<input
+									type="checkbox"
+									checked={checkedAll}
+									onChange={checkAll} />
+							</th>
 							<th scope="col">id</th>
 							<th scope="col">name</th>
 							<th scope="col">mail</th>
@@ -143,4 +192,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, { retrieveUsers, updateUser, deleteAllUsers })(UsersPage);
+export default connect(mapStateToProps, { retrieveUsers, updateUser, deleteAllUsers, blockUser, blockAllUsers, deleteUser, unblockUser, unblockAllUsers })(UsersPage);

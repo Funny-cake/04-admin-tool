@@ -2,20 +2,26 @@ import http from "../http-common";
 
 const baseURL = "/auth";
 
+const key = "user";
+
 class AuthService {
 	login(email, password, remember) {
 		return http
 			.post(`${baseURL}/login`, { email, password, remember })
 			.then((response) => {
 				if (response.data.accessToken) {
-					localStorage.setItem("user", JSON.stringify(response.data));
+					localStorage.setItem(key, JSON.stringify(response.data));
 				}
 				return response.data;
 			});
 	}
 
 	logout() {
-		localStorage.removeItem("user");
+		localStorage.removeItem(key);
+	}
+
+	currentUser() {
+		return JSON.parse(localStorage.getItem(key));
 	}
 }
 
