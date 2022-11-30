@@ -9,12 +9,10 @@ import RegistrationPage from './components/registration-page/registration-page.c
 import { Provider } from 'react-redux';
 import store from './store';
 
-
-
 ReactDOM.render(
 	<Provider store={store}>
 		<div>
-			<BrowserRouter>
+			<BrowserRouter basename={process.env.PUBLIC_URL}>
 				<Switch>
 					<Route exact path="/">
 						<UsersPage />
