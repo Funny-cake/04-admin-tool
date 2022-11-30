@@ -1,12 +1,10 @@
 {
-	"homepage": "http://Funny-cake.github.io/04-admin-tool",
+	"homepage": "",
 	"name": "04-admin-tool",
 	"version": "1.0.0",
 	"description": "tools for admin",
 	"main": "app.jsx",
 	"scripts": {
-		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build",
 		"start": "webpack --mode development --watch",
 		"serve": "webpack serve --open",
 		"build": "webpack --mode production",
@@ -31,7 +29,6 @@
 		"copy-webpack-plugin": "^9.1.0",
 		"css-loader": "^5.2.7",
 		"file-loader": "^6.2.0",
-		"gh-pages": "^4.0.0",
 		"html-webpack-plugin": "^5.5.0",
 		"mini-css-extract-plugin": "^2.7.0",
 		"postcss-loader": "^6.2.1",
