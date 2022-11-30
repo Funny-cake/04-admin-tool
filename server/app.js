@@ -9,7 +9,7 @@ const app = express();
 db.sequelize.sync();
 
 var corsOptions = {
-	origin: "http://localhost:8081"
+	origin: "https://funny-cake.github.io/04-admin-tool"
 };
 
 app.use(cors(corsOptions));
