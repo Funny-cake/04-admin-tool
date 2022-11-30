@@ -32,6 +32,12 @@ export function login(req, res) {
 
 						console.log("2:",  user.id, authConfig.secret, token);
 
+						user.lastLoginAt = new Date();
+
+						user.save().then(() => {
+							console.log(`User id=${user.id} saved successfully!`);
+						})
+
 						res.status(200).send({
 							...mapUser(user),
 							...{ accessToken: token }
