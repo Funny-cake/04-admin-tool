@@ -1,10 +1,12 @@
 {
-	"homepage": "https://github.com/Funny-cake/04-admin-tool/",
+	"homepage": "https://funny-cake.github.io/04-admin-tool",
 	"name": "04-admin-tool",
 	"version": "1.0.0",
 	"description": "tools for admin",
 	"main": "app.jsx",
 	"scripts": {
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d dist",
 		"start": "webpack --mode development --watch",
 		"serve": "webpack serve --open",
 		"build": "webpack --mode production"
@@ -46,6 +48,7 @@
 		"@babel/core": "^7.20.2",
 		"@babel/preset-env": "^7.20.2",
 		"babel-loader": "^8.3.0",
+		"gh-pages": "^4.0.0",
 		"redux-devtools-extension": "^2.13.9",
 		"sass": "^1.56.1",
 		"sass-loader": "^12.6.0",
@@ -54,4 +57,3 @@
 		"webpack-dev-server": "^3.11.3"
 	}
 }
- 
